@@ -1,5 +1,5 @@
 # sudoku_mostconstrained
-Sudoku solver
+
 Sudoku Solver
 
 Currently works just with 9x9 sudoku and 3x3 box standard sudokus. Theres a little bit of magic numbers in the code like 9 and 3 for this
