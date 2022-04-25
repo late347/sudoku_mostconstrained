@@ -7,6 +7,12 @@
 
 // parameters is the board
 // returns the solution by reference as solved board
+// uses recursion and pass-by-value and RAII for the board solving
+// therefore, we can skip any board-undo operations on the board when we backtrack
+// from wrong sudoku guesses.
+// 
+// this approach, creates more memory need, but its simpler to program
+// stack usage will become higher though, because for every recursion it has a board.
 bool solve(Board board, Board& resultBoard)
 {
     if (board.isSolved())
@@ -26,15 +32,14 @@ bool solve(Board board, Board& resultBoard)
         Cell cell = board.getMostConstrainedEmpty();
         // get possible moves
         auto values = cell.getPossibleValues();
-        int valuesAmount = values.size();
-        int r = cell.rowIdx, c = cell.colIdx;
+        const int r = cell.rowIdx;
+        const int c = cell.colIdx;
         // recursively try possible moves
         for (auto&& pair : values)
         {
-            auto move = pair.second;
-            Board tempboard = board;
-            tempboard.array[r][c].guess(move);
-            if (solve(tempboard, resultBoard))
+            const auto move = pair.second;
+            board.array[r][c].guess(move);
+            if (solve(board, resultBoard))
             {
                 return true;
             }
