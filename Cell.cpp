@@ -2,9 +2,6 @@
 
 Cell::Cell(int rowCoord, int colCoord, bool isClue, int val)
 {
-    Cell::State newState;
-    newState = (isClue) ? Cell::State::CLUE : Cell::State::EMPTY;
-    searchState = newState;
     theValue = val;
     rowIdx = rowCoord;
     colIdx = colCoord;

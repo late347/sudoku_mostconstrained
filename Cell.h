@@ -10,12 +10,6 @@
 class Cell
 {
 public:
-    enum State
-    {
-        CLUE,
-        GUESSED_VALUE,
-        EMPTY
-    };
 
     Cell(int rowCoord = 0, int colCoord = 0, bool isClue = false, int val = -1);
 
@@ -34,21 +28,18 @@ public:
 
     void guess(int guessedVal)
     {
-        searchState = GUESSED_VALUE;
         theValue = guessedVal;
         possibleMoves.erase(guessedVal);
     }
 
     void setAsClue(int sureValue)
     {
-        searchState = CLUE;
         theValue = sureValue;
         possibleMoves.erase(sureValue);
     }
 
 public:
     int theValue; // cell's actual sudoku numeric value, the cell entry
-    State searchState; // state of the cell  possibly useful to differentiate between guess and clue (?)
     int rowIdx;
     int colIdx;
     // use key and value as the same tried number, map rebalances the keys and values into ascending order which is good.
