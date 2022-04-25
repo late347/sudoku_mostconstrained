@@ -191,6 +191,9 @@ public:
                 }
             }
         }
+        if (empties.empty()) {
+            throw std::logic_error("unexpectedly called getMostConstrainedEmpty() cannot return an empty cell from the board!!!??? think again about the algo\n");
+        }
 
         // for all cells in empties must see what the possibleMoves are for those emptycells
         // they might have been updated (most likely were)
