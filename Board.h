@@ -56,8 +56,10 @@ public:
                 cout << " " << array[r][c];
             }
             cout << endl;
-            if ((r + 1) % 3 == 0)  //print extra newline for every third row to cleanly print the boxes NOTE!: uses magic value 3 for sudoku
+            //print extra newline for every third row to cleanly print the boxes NOTE!: uses magic value 3 for sudoku
+            if ((r + 1) % 3 == 0) {
                 cout << endl;
+            }
         }
     }
 
@@ -85,8 +87,9 @@ public:
         {
             for (int j = 0; j < this->numberOfColumns(); j++)
             {
-                if (this->array[i][j].theValue == 0)
+                if (this->array[i][j].theValue == 0) {
                     return false;
+                }
             }
         }
         return true;
@@ -105,15 +108,17 @@ public:
         for (auto c = 0; c < this->numberOfColumns(); c++) 
         {
             // if its duplicate its illegal
-            if (array[row][c].theValue == cellvalue && col != c)
+            if (array[row][c].theValue == cellvalue && col != c) {
                 return false;
+            }
         }
 
         for (auto r = 0; r < this->numberOfRows(); r++)
         {
             // if its duplicate its illegal
-            if (array[r][col].theValue == cellvalue && row != r)
+            if (array[r][col].theValue == cellvalue && row != r) {
                 return false;
+            }
         }
 
         // iterate to sweep and check the sudoku box 
@@ -145,14 +150,16 @@ public:
         // iterate to sweep the rows and columns to see if legally unique
         for (auto c = 0; c < this->numberOfColumns(); c++) 
         {
-            if (array[R][c].theValue == move && C != c)
+            if (array[R][c].theValue == move && C != c) {
                 return false;
+            }
         }
 
         for (auto r = 0; r < this->numberOfRows(); r++)
         {
-            if (array[r][C].theValue == move && R != r)
+            if (array[r][C].theValue == move && R != r) {
                 return false;
+            }
         }
 
         // iterate to sweep the sudoku box 
@@ -214,8 +221,9 @@ public:
         
         Cell minCell = empties.front();
         bool first = true;
-        if (minCell.theValue != 0)
+        if (minCell.theValue != 0) {
             throw std::invalid_argument("most constrained empty cell was nonempty!");
+        }
 
 
         // iterate and get the empty cell with least possible values and return it
