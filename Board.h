@@ -227,7 +227,7 @@ public:
 
 
         // iterate and get the empty cell with least possible values and return it
-        for (auto&& cell : empties)
+        for (const auto& cell : empties)
         {
             if (first)
             {
