@@ -6,6 +6,7 @@
 #include "Sudoku_includes.h"
 #include <exception>
 #include <iomanip>
+#include <thread>
 
 class Board
 {
