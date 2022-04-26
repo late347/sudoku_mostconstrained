@@ -7,6 +7,8 @@
 #include <exception>
 #include <iomanip>
 #include <thread>
+#include <execution>
+#include <algorithm>
 
 class Board
 {
@@ -58,6 +60,7 @@ public:
     Cell getMostConstrainedEmpty()
     {
         // get empty cells together from board
+        // replace with PARALLEL copy_if()
         std::vector<Cell> empties;
 
         for (int r = 0; r < this->numberOfRows(); r++)
@@ -81,6 +84,24 @@ public:
         // and board knows himself and his cells
         for (auto&& eCell : empties)
         {
+        // replace loop with  parallelized version of launching threads
+        /*
+        for i=0 i< emptiesSize i++
+            launch thread that takes Cell by value, and board.array by value  and shraed resource empties vec by reference
+            thread starts to process the guessing for the cell
+            NOTE!!!: shared resource is the owning empties vector, guard it with mutex
+            thread acquires mutex and returns the modified local Cell obj into the vector empties reference
+
+         outside the for all empties loop after it
+         we can join the threads
+        */
+
+
+            // for each cell  => could launch thread that is:::
+            //              reading the isLEgalMove for any possible sudoku moves from the board object
+            //              if it was legal sudoku move
+            //                  modify the cell by reference, (this is sha
+
             for (int i = 1; i <= SUDOKU_SIZE; i++)
             {
                 if (this->isLegalMove(eCell, i))
@@ -98,7 +119,7 @@ public:
             throw std::invalid_argument("most constrained empty cell was nonempty!");
         }
 
-
+        //replace with PARALLEL min_element()
         // iterate and get the empty cell with least possible values and return it
         for (const auto& cell : empties)
         {
