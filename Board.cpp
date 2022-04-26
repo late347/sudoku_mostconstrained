@@ -10,6 +10,48 @@ bool Board::isLegalMove(const Cell& cell, const int move) const
     const int R = cell.rowIdx;
     const int C = cell.colIdx;
 
+
+    auto sweep_the_cols = [this](int moveCol, int moveRow, int moveVal) {
+        for (auto c = 0; c < this->numberOfColumns(); c++)
+        {
+            // if its duplicate its illegal
+            if (array[moveRow][c].theValue == moveVal && moveCol != c) {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    auto sweep_the_rows = [this](int moveCol, int moveRow, int moveVal) {
+        for (auto r = 0; r < this->numberOfRows(); r++)
+        {
+            // if its duplicate its illegal
+            if (array[r][moveCol].theValue == moveVal && moveRow != r) {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    auto sweep_the_boxes = [this](int moveCol, int moveRow, int moveVal) {
+        // iterate to sweep and check the sudoku box 
+        const int boxCols = moveCol / (3);
+        const int boxRows = moveRow / (3);
+
+        for (int i = boxRows * 3; i < boxRows * 3 + 3; i++)
+        {
+            for (int j = boxCols * 3; j < boxCols * 3 + 3; j++)
+            {
+                if (array[i][j].theValue == moveVal && (moveRow != i && moveCol != j))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
+
+
     // iterate to sweep the rows and columns to see if legally unique
     for (auto c = 0; c < this->numberOfColumns(); c++)
     {
