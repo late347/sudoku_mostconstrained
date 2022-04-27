@@ -1,11 +1,12 @@
 #pragma once
 
+#include "Sudoku_includes.h"
+
 #include <vector>
 #include <set>
 #include <iostream>
 #include <deque>
 #include <map>
-#include "Sudoku_includes.h"
 
 class Cell
 {

@@ -1,4 +1,8 @@
 #include "Board.h"
+#include "Algo.h"
+#include "GlobalVariables.h"
+#include <mutex>
+
 
 bool Board::isLegalMove(const Cell& cell, const int move) const
 {
@@ -152,5 +156,106 @@ bool Board::isLegalMove(const int row, const int col, const int thevalue) const
     }
 
     return true;
+
+}
+
+Cell Board::getMostConstrainedEmpty()
+{
+    // gets empty cells and returns the cell which has least possibleMoves available
+    // in best case a cell only would have 1 possibleMove  so that it is certain that is the cell value
+
+        // get empty cells together from board
+        // replace with PARALLEL copy_if() if possible and feasible
+    std::vector<Cell> empties;
+    
+
+    for (int r = 0; r < this->numberOfRows(); r++)
+    {
+        for (int c = 0; c < this->numberOfColumns(); c++)
+        {
+            if (array[r][c].theValue == 0)
+            {
+                Cell e = array[r][c];
+                empties.push_back(e);
+            }
+        }
+    }
+
+    if (empties.empty()) {
+        throw std::logic_error("unexpectedly called getMostConstrainedEmpty() cannot return an empty cell from the board!!!??? think again about the algo\n");
+    }
+
+    // for all cells in empties must see what the possibleMoves are for those emptycells
+    // they might have been updated (most likely were)
+    // only board class can do the update because all cells affect all cells's possibleMoves
+    // and board knows himself and his cells
+
+    std::vector<std::thread> theEmptiesUpdatingThreads{};
+    std::vector<Cell> updatedEmpties{};
+
+
+    auto update_cell_possibles = [](Cell eCell, Board curBoard, std::vector<Cell>& sharedUpdatedEmpties) {
+        for (int i = 1; i <= SUDOKU_SIZE; i++)
+        {
+            if (curBoard.isLegalMove(eCell, i))
+            {
+                eCell.setPossibleMove(i);
+                
+                    std::lock_guard<std::mutex> lockGuardian{theMutex};
+                    sharedUpdatedEmpties.push_back(eCell);
+                
+               
+            }
+        }
+    };
+
+
+
+    for (auto& eCell : empties)
+    {
+
+        // replace loop with  parallelized version of launching threads
+       // theEmptiesUpdatingThreads.push_back(std::thread(update_cell_possibles, std::ref(eCell)));
+
+        for (int i = 1; i <= SUDOKU_SIZE; i++)
+        {
+            if (this->isLegalMove(eCell, i))
+            {
+                eCell.setPossibleMove(i);
+            }
+        }
+    }
+    //  join after the updating
+    //for (auto& t : theEmptiesUpdatingThreads) {
+    //    t.join();
+    //}
+    // we should always get a real empty cell into here
+
+    Cell minCell = empties.front();
+    bool first = true;
+    if (minCell.theValue != 0) {
+        throw std::invalid_argument("most constrained empty cell was nonempty!");
+    }
+
+    //replace with PARALLEL min_element()
+    // iterate and get the empty cell with least possible values and return it
+    for (const auto& cell : empties)
+    {
+        if (first)
+        {
+            first = false;
+            continue;
+        }
+        else
+        {
+            auto curMin = cell.possibleMoves.size();
+            if (curMin < minCell.possibleMoves.size())
+            {
+                minCell = cell;
+            }
+        }
+    }
+    return minCell;
+
 
 }
