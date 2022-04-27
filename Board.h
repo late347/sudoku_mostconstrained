@@ -60,7 +60,7 @@ public:
     Cell getMostConstrainedEmpty()
     {
         // get empty cells together from board
-        // replace with PARALLEL copy_if()
+        // replace with PARALLEL copy_if() if possible and feasible
         std::vector<Cell> empties;
 
         for (int r = 0; r < this->numberOfRows(); r++)
@@ -84,7 +84,8 @@ public:
         // and board knows himself and his cells
         for (auto&& eCell : empties)
         {
-        // replace loop with  parallelized version of launching threads
+        
+            // replace loop with  parallelized version of launching threads
         /*
         for i=0 i< emptiesSize i++
             launch thread that takes Cell by value, and board.array by value  and shraed resource empties vec by reference
