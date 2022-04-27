@@ -9,6 +9,12 @@
 #include <thread>
 #include <execution>
 #include <algorithm>
+#include <mutex>
+
+
+
+class Board;
+class Cell;
 
 class Board
 {
@@ -62,6 +68,7 @@ public:
         // get empty cells together from board
         // replace with PARALLEL copy_if() if possible and feasible
         std::vector<Cell> empties;
+        static std::mutex theMutex{};
 
         for (int r = 0; r < this->numberOfRows(); r++)
         {
@@ -82,27 +89,26 @@ public:
         // they might have been updated (most likely were)
         // only board class can do the update because all cells affect all cells's possibleMoves
         // and board knows himself and his cells
-        for (auto&& eCell : empties)
+
+        auto update_cell_possibles = [this](Cell& eCell) {
+            for (int i = 1; i <= SUDOKU_SIZE; i++)
+            {
+                if (this->isLegalMove(eCell, i))
+                {
+                    //std::lock_guard<std::mutex> jimmy(theMutex);
+                    eCell.setPossibleMove(i);
+                }
+            }
+        };
+
+        std::vector<std::thread> theEmptiesUpdatingThreads{};
+
+        for (auto& eCell : empties)
         {
         
             // replace loop with  parallelized version of launching threads
-        /*
-        for i=0 i< emptiesSize i++
-            launch thread that takes Cell by value, and board.array by value  and shraed resource empties vec by reference
-            thread starts to process the guessing for the cell
-            NOTE!!!: shared resource is the owning empties vector, guard it with mutex
-            thread acquires mutex and returns the modified local Cell obj into the vector empties reference
-
-         outside the for all empties loop after it
-         we can join the threads
-        */
-
-
-            // for each cell  => could launch thread that is:::
-            //              reading the isLEgalMove for any possible sudoku moves from the board object
-            //              if it was legal sudoku move
-            //                  modify the cell by reference, (this is sha
-
+           // theEmptiesUpdatingThreads.push_back(std::thread(update_cell_possibles, std::ref(eCell)));
+            
             for (int i = 1; i <= SUDOKU_SIZE; i++)
             {
                 if (this->isLegalMove(eCell, i))
@@ -111,7 +117,10 @@ public:
                 }
             }
         }
-
+        //  join after the updating
+        //for (auto& t : theEmptiesUpdatingThreads) {
+        //    t.join();
+        //}
         // we should always get a real empty cell into here
         
         Cell minCell = empties.front();
