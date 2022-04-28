@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Cell.h"
+#include "Sudoku_includes.h"
 #include "Board.h"
 #include <algorithm>
 #include <stack>
