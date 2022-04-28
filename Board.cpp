@@ -249,8 +249,7 @@ Cell Board::getMostConstrainedEmpty()
 
     // we should always get a real empty cell into here
     Cell minCell = empties.front();
-    // MULTITHREADED BREAKPOINT
-    // THE RECURSION IS NOT PROGRESSING TO THE SMALLER CASES
+
     bool first = true;
     if (minCell.theValue != 0) 
     {
