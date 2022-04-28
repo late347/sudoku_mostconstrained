@@ -233,9 +233,10 @@ Cell Board::getMostConstrainedEmpty()
         }
 #endif // !MULTITHREAD
     }
-    int debug_before_threads_die = -777;
-
     
+#ifdef MULTITHREAD
+    int debug_before_threads_die = -777;
+#endif
 
 
 #ifdef MULTITHREAD
@@ -243,9 +244,11 @@ Cell Board::getMostConstrainedEmpty()
         theThread.join();
     }
 
-    int debug_after_threads_joined = 1234;
     empties = updatedEmpties;
+
+    int debug_after_threads_joined = 1234;
 #endif // MULTITHREAD
+
 
     // we should always get a real empty cell into here
     Cell minCell = empties.front();
