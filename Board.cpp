@@ -199,9 +199,10 @@ Cell Board::getMostConstrainedEmpty()
 
     auto update_cell_possibles = [](Cell eCell, Board curBoard, std::vector<Cell>& sharedUpdatedEmpties) {
 
-        Cell thread_local theCell = eCell;
-        Board thread_local theBoard = curBoard;
-        for (thread_local int i = 1; i <= SUDOKU_SIZE; i++)
+        Cell  theCell{ eCell };
+        Board  theBoard{curBoard};
+        int sudoku{ SUDOKU_SIZE };
+        for (int i=1; i <= sudoku; i++)
         {
             if (theBoard.isLegalMove(theCell, i))
             {
@@ -232,11 +233,17 @@ Cell Board::getMostConstrainedEmpty()
         }
 #endif // !MULTITHREAD
     }
+    int debug_before_threads_die = -777;
+
+    
+
 
 #ifdef MULTITHREAD
     for (auto& theThread : theEmptiesUpdatingThreads) {
         theThread.join();
     }
+
+    int debug_after_threads_joined = 1234;
     empties = updatedEmpties;
 #endif // MULTITHREAD
 
