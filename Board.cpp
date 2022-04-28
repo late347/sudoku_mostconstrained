@@ -168,7 +168,7 @@ Cell Board::getMostConstrainedEmpty()
 
     // get empty cells together from board
     // replace with PARALLEL copy_if() if possible and feasible
-    std::vector<Cell> empties;
+    std::vector<Cell> empties{};
     
 
     for (int r = 0; r < this->numberOfRows(); r++)
