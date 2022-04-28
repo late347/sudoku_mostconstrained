@@ -76,7 +76,7 @@ int main()
      {0, 9, 0,      0, 0, 0,        4, 0, 0} };
 
     Board realBoard(SUDOKU_SIZE, SUDOKU_SIZE);
-    realBoard.initialize(sudoku_hard_skiena, 9, 9);
+    realBoard.initialize(sudoku_easy_1, 9, 9);
 
     realBoard.printBoard();
 
